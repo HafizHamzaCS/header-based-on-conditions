@@ -1,0 +1,65 @@
+#headerSelectionPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    max-width: 300px;
+    width: 100%;
+}
+
+#headerSelectionPopup h3 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333333;
+    text-align: center;
+}
+
+.radio-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#headerSelectionPopup label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #555555;
+    cursor: pointer;
+}
+
+#headerSelectionPopup input[type="radio"] {
+    margin-right: 10px;
+}
+
+.radio-label {
+    transition: color 0.3s ease;
+}
+
+#headerSelectionPopup label:hover .radio-label {
+    color: #0073e6;
+}
+
+#headerSelectionPopup button[type="submit"] {
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #0073e6;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#headerSelectionPopup button[type="submit"]:hover {
+    background-color: #005bb5;
+}
