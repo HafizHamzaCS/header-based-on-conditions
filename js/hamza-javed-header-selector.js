@@ -3,13 +3,11 @@ document.addEventListener("DOMContentLoaded", function() {
     if (!getCookie("header_option")) {
         document.getElementById("headerSelectionPopup").style.display = "block";
     }
-
-    // Handle form submission
     document.getElementById("headerSelectionForm").addEventListener("submit", function(event) {
         event.preventDefault();
         var selectedOption = document.querySelector('input[name="header_option"]:checked').value;
-        setCookie("header_option", selectedOption, 1); // Set the cookie for 1 day
-        location.reload(); // Reload the page to apply the new header
+        setCookie("header_option", selectedOption, 1); // Store the selection in a cookie for 1 day
+        location.reload(); // Reload the page to apply the header selection
     });
 });
 

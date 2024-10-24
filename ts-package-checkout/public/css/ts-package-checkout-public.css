@@ -1,0 +1,43 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+
+/* Style the "Place order" button on the checkout page */
+#place_order {
+    background-color: #000000!important; /* Black background color */
+    color: #ffffff!important; /* White text color */
+    border-color: #000000!important; /* Optional: match border color to the background */
+}
+
+#place_order:hover {
+    background-color: #333333!important; /* Darker shade on hover */
+    border-color: #333333!important; /* Optional: match border color on hover */
+}
+#contact-info-section {
+    background-image: linear-gradient(to right, #7A1983, #E76344)!important;
+    color: #fff!important;
+    display: flex!important;
+    align-items: center!important;
+    gap: 10px!important;
+    padding: 10px 20px!important;
+    border-radius: 8px 8px 0px 0px!important;
+    margin-bottom: 20px!important;
+}
+/* Add this CSS to your theme's stylesheet or via the WordPress Customizer */
+
+.e-checkout__column.e-checkout__column-end {
+    border: 1px solid lightgray;
+    border-radius: 10px !important;
+}
+
+/* Apply margin-top only for desktop screens */
+@media (min-width: 768px) {
+    .e-checkout__column.e-checkout__column-end {
+        margin-top: 45px !important;
+    }
+}
+#contact-info-section h3 {
+    font-size: 16px!important;
+    color: white!important;
+}

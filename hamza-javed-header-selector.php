@@ -15,81 +15,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Enqueue scripts and styles
 function hamza_javed_enqueue_scripts() {
-    if ( is_front_page() ) { // Load scripts only on the homepage
-        wp_enqueue_script( 'hamza-javed-header-selector', plugin_dir_url( __FILE__ ) . 'js/hamza-javed-header-selector.js', array( 'jquery' ), '1.0', true );
+
         wp_enqueue_style( 'hamza-javed-header-selector', plugin_dir_url( __FILE__ ) . 'css/hamza-javed-header-selector.css' );
     }
-}
+
 add_action( 'wp_enqueue_scripts', 'hamza_javed_enqueue_scripts' );
 
-
-use XTS\Modules\Header_Builder\Frontend;
-
-
-
-
-// Add the popup HTML to the footer
-function hamza_javed_add_popup_html() {
-  
-$options = get_option('header_selection_options');
-
-$above_36_text = isset($options['header_above_36']) ? $options['header_above_36'] : 'Above 36';
-$below_36_text = isset($options['header_below_36']) ? $options['header_below_36'] : 'Below 36';
-$handicap_text = isset($options['header_handicap']) ? $options['header_handicap'] : 'What is Handicap';
-
-?>
-<div id="headerSelectionPopup" style="display:none;">
-    <form id="headerSelectionForm">
-        <h3>Select an Option:</h3>
-        <div class="radio-group">
-            <label>
-                <input type="radio" name="header_option" value="<?php echo esc_attr($above_36_text); ?>">
-                <span class="radio-label"><?php echo esc_html($above_36_text); ?></span>
-            </label>
-            <label>
-                <input type="radio" name="header_option" value="<?php echo esc_attr($below_36_text); ?>">
-                <span class="radio-label"><?php echo esc_html($below_36_text); ?></span>
-            </label>
-            <label>
-                <input type="radio" name="header_option" value="<?php echo esc_attr($handicap_text); ?>">
-                <span class="radio-label"><?php echo esc_html($handicap_text); ?></span>
-            </label>
-        </div>
-        <button type="submit">Submit</button>
-    </form>
-</div>
-<?php
-
-    }
-
-add_action( 'wp', 'hamza_javed_add_popup_html' );
-add_action('wp', 'set_custom_header_based_on_condition', 10);
-
-function set_custom_header_based_on_condition() {
-    // Check if the cookie is set
-    if (isset($_COOKIE['header_option'])) {
-        // Convert the cookie value to lowercase for consistent comparison
-        $selected_option = strtolower(sanitize_text_field($_COOKIE['header_option']));
-        
-        // Define the mapping based on your conditions
-        if ($selected_option === 'non golfer') {
-            $header_id = 'default_header'; // Non Golfer header
-        } elseif ($selected_option === 'below 36') {
-            $header_id = 'header_764078'; // Under 36 header
-        } elseif ($selected_option === 'above 36') {
-            $header_id = 'header_589950'; // Above 36 header
-        } else {
-            $header_id = 'default_header'; // Fallback to Non Golfer header
-        }
-
-        
-        update_option('whb_main_header', $header_id);
-        
-        $options = get_option('xts-woodmart-options');
-        $options['default_header'] = $header_id;
-        update_option('xts-woodmart-options', $options);
-    }
-}
 
 // Add settings page to the admin menu
 function custom_header_selection_menu() {
@@ -167,6 +98,18 @@ function custom_header_selection_settings_init() {
             'name'      => 'header_selection_options[header_handicap]',
         )
     );
+     // Dropdown for cookie duration
+    add_settings_field(
+        'cookie_duration',
+        'Cookie Duration',
+        'custom_header_selection_cookie_duration_callback',
+        'header-selection-settings',
+        'header_selection_settings_section',
+        array(
+            'label_for' => 'cookie_duration',
+            'name'      => 'header_selection_options[cookie_duration]',
+        )
+    );
 }
 add_action('admin_init', 'custom_header_selection_settings_init');
 
@@ -178,6 +121,21 @@ function custom_header_selection_text_field_callback($args) {
     <input type="text" id="<?php echo esc_attr($args['label_for']); ?>" name="<?php echo esc_attr($args['name']); ?>" value="<?php echo esc_attr($value); ?>" class="regular-text">
     <?php
 }
+// Callback function to render the cookie duration dropdown
+function custom_header_selection_cookie_duration_callback($args) {
+    $options = get_option('header_selection_options');
+    $value = isset($options[$args['label_for']]) ? $options[$args['label_for']] : '86400'; // Default to 1 day (86400 seconds)
+    ?>
+    <select id="<?php echo esc_attr($args['label_for']); ?>" name="<?php echo esc_attr($args['name']); ?>">
+        <option value="3600" <?php selected($value, '3600'); ?>>1 Hour</option>
+        <option value="10800" <?php selected($value, '10800'); ?>>3 Hours</option>
+        <option value="86400" <?php selected($value, '86400'); ?>>1 Day</option>
+        <option value="604800" <?php selected($value, '604800'); ?>>1 Week</option>
+        <option value="1209600" <?php selected($value, '1209600'); ?>>2 Weeks</option>
+        <option value="2592000" <?php selected($value, '2592000'); ?>>1 Month</option>
+    </select>
+    <?php
+}
 // Add a settings link to the plugin actions
 function hamza_javed_plugin_settings_link($links) {
     $settings_link = '<a href="options-general.php?page=header-selection-settings">Settings</a>';
@@ -186,3 +144,246 @@ function hamza_javed_plugin_settings_link($links) {
 }
 
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'hamza_javed_plugin_settings_link');
+
+// add_action( 'after_setup_theme', 'custom_check_woodmart_headers' );
+
+// function custom_check_woodmart_headers() {
+//     if ( function_exists( 'woodmart_get_whb_headers_array' ) ) {
+//         $headers = woodmart_get_whb_headers_array();
+//         // $current_headers_instance = whb_get_header();
+//         // $whb_get_settings = whb_get_settings();
+//         // $woodmart_get_header_classes = woodmart_get_header_classes();
+//         echo '<pre>';
+//         // print_r($headers);
+//         print_r($headers);
+//         echo '</pre>';
+//     } else {
+//         echo 'The function woodmart_get_whb_headers_array() is not available.';
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+use XTS\Modules\Header_Builder\Frontend;
+// Add the popup HTML to the footer
+function hamza_javed_add_popup_html() {
+  
+$options = get_option('header_selection_options');
+
+$above_36_text = isset($options['header_above_36']) ? $options['header_above_36'] : 'Above 36';
+$below_36_text = isset($options['header_below_36']) ? $options['header_below_36'] : 'Below 36';
+$handicap_text = isset($options['header_handicap']) ? $options['header_handicap'] : 'What is Handicap';
+
+?>
+<div id="headerSelectionPopup">
+    <form id="headerSelectionForm">
+        <h3>Kies een Niveau </h3>
+        <div class="radio-group">
+            <label>
+                <input type="radio" name="header_option" value="header_589950">
+                <input type="hidden" name="homepage_id" value="16936">
+                <span class="radio-label"><?php echo esc_html($above_36_text); ?></span>
+            </label>
+            <label>
+                <input type="radio" name="header_option" value="header_764078">
+                <input type="hidden" name="homepage_id" value="16825">
+
+                <span class="radio-label"><?php echo esc_html($below_36_text); ?></span>
+            </label>
+            <label>
+                <input type="radio" name="header_option" value="default_header">
+                <input type="hidden" name="homepage_id" value="16755">
+
+                <span class="radio-label"><?php echo esc_html($handicap_text); ?></span>
+            </label>
+        </div>
+        <button type="submit">Doorgaan</button>
+    </form>
+</div>
+ <script>
+        console.log('Popup HTML is rendered');
+    </script>
+<?php
+    }
+add_shortcode('header_selection_form', 'hamza_javed_add_popup_html');
+// add_action('wp', 'set_custom_header_based_on_condition', 10);
+
+function set_custom_header_and_homepage_based_on_condition() {
+    if (isset($_COOKIE['header_option']) && isset($_COOKIE['homepage_id'])) {
+        // Sanitize and get the selected header option from the cookie
+        $selected_option = strtolower(sanitize_text_field($_COOKIE['header_option']));
+        $homepage_id = intval($_COOKIE['homepage_id']); // Ensure the homepage ID is an integer
+
+        // Define the mapping based on your conditions
+        if ($selected_option === 'default_header') {
+            $header_id = 'default_header'; // Non Golfer header
+        } elseif ($selected_option === 'header_764078') {
+            $header_id = 'header_764078'; // Under 36 header
+        } elseif ($selected_option === 'header_589950') {
+            $header_id = 'header_589950'; // Above 36 header
+        } else {
+            $header_id = 'default_header'; // Fallback to Non Golfer header
+        }
+
+        // Update the header option based on the cookie value
+        update_option('whb_main_header', $header_id);
+
+        // Update theme options if needed
+        $options = get_option('xts-woodmart-options');
+        $options['default_header'] = $header_id;
+        update_option('xts-woodmart-options', $options);
+
+        // Update the homepage to the selected page
+        if (get_option('page_on_front') != $homepage_id) {
+            update_option('page_on_front', $homepage_id);
+            update_option('show_on_front', 'page');
+        }
+    }
+}
+add_action('init', 'set_custom_header_and_homepage_based_on_condition');
+
+
+
+function enqueue_dynamic_header_selector_script() {
+    ?>
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+        console.log("DOM fully loaded and parsed");
+
+        // Function to get a cookie value
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        // Check if the cookies are set
+        var headerOptionCookie = getCookie("header_option");
+        var homepageIdCookie = getCookie("homepage_id");
+
+        // Get the form popup element
+        var formPopup = $("#headerSelectionPopup");
+
+        // If cookies are not set, show the popup
+        if (!headerOptionCookie || !homepageIdCookie) {
+            if (formPopup.length) {
+                formPopup.show(); // Show the form popup
+            } else {
+                console.error("Form popup element not found");
+            }
+        }
+
+
+
+
+        var triggerElement = $("#trigger-header-form .elementor-button");
+
+        // Add both click and touchend event listeners to handle desktop and mobile interactions
+        if (triggerElement.length) {
+            triggerElement.on("click touchend", handleFormPopup);
+        }
+
+        // Function to handle the form popup display
+        function handleFormPopup(event) {
+            event.preventDefault(); // Prevent default link behavior
+
+            // Get the form popup element
+            var formPopup = $("#headerSelectionPopup");
+
+            // Check if the form popup element exists
+            if (formPopup.length) {
+                formPopup.show(); // Show the form
+            } else {
+                console.error("Form popup element not found");
+            }
+        }
+
+        // Handle form submission
+        var headerSelectionForm = $("#headerSelectionForm");
+        if (headerSelectionForm.length) {
+            headerSelectionForm.on("submit", function(event) {
+                event.preventDefault();
+                console.log("Form submitted");
+
+                var selectedOption = $('input[name="header_option"]:checked');
+                if (selectedOption.length) {
+                    var selectedHomepageId = selectedOption.next().val();
+                    console.log("Selected Option: " + selectedOption.val());
+                    console.log("Selected Homepage ID: " + selectedHomepageId);
+
+                    // Get cookie duration from the backend
+                    var cookieDuration = <?php echo json_encode(get_option('header_selection_options')['cookie_duration']); ?>;
+                    console.log("Cookie Duration: " + cookieDuration);
+
+                    // Set the cookies with the selected option and homepage ID
+                    setCookie("header_option", selectedOption.val(), cookieDuration);
+                    setCookie("homepage_id", selectedHomepageId, cookieDuration);
+
+                    // Reload the page to apply the header and homepage change after setting the cookies
+                    location.reload();
+                } else {
+                    console.error("No header option selected");
+                }
+            });
+        } else {
+            console.error("Header selection form not found");
+        }
+
+        // Function to set a cookie
+        function setCookie(name, value, seconds) {
+            var expires = "";
+            if (seconds) {
+                var date = new Date();
+                date.setTime(date.getTime() + (seconds * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+            console.log("Cookie set: " + name + "=" + value);
+        }
+
+
+        // Redirect to the homepage after header and homepage change
+        headerSelectionForm.on("submit", function() {
+            window.location.href = "/";
+        });
+
+
+
+    });
+</script>
+
+
+    <?php
+}
+add_action('wp_footer', 'hamza_javed_add_popup_html', 10); // Priority 10
+add_action('wp_footer', 'enqueue_dynamic_header_selector_script', 20); // Priority 20
+
