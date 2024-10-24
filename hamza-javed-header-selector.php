@@ -157,29 +157,64 @@ $handicap_text = isset($options['header_handicap']) ? $options['header_handicap'
 
 ?>
 <div id="headerSelectionPopup">
+    <button type="button" id="closePopupButton" style="position: absolute;top: 10px;right: 10px;border: none;font-size: 20px;cursor: pointer;background: black;">&times;</button>
+
     <form id="headerSelectionForm">
-        <h3>Kies een Niveau </h3>
+        <h3>Kies een Golf Niveau </h3>
         <div class="radio-group">
-            <label>
-                <input type="radio" name="header_option" value="header_589950">
+           
+<!--             <label>
+                <input type="radio" name="header_option" value="header_764078">
                 <input type="hidden" name="homepage_id" value="16936">
+                <span class="radio-label"><?php echo esc_html($below_36_text); ?></span>
+            </label>
+             <label>
+                <input type="radio" name="header_option" value="header_589950">
+                <input type="hidden" name="homepage_id" value="16755">
                 <span class="radio-label"><?php echo esc_html($above_36_text); ?></span>
             </label>
             <label>
-                <input type="radio" name="header_option" value="header_764078">
+                <input type="radio" name="header_option" value="default_header">
                 <input type="hidden" name="homepage_id" value="16825">
 
+                <span class="radio-label"><?php echo esc_html($handicap_text); ?></span>
+            </label> -->
+             <label>
+                <input type="radio" name="header_option" value="header_764078">
+                <input type="hidden" name="homepage_id" value="16755">
                 <span class="radio-label"><?php echo esc_html($below_36_text); ?></span>
+            </label>
+             <label>
+                <input type="radio" name="header_option" value="header_589950">
+                <input type="hidden" name="homepage_id" value="16825">
+                <span class="radio-label"><?php echo esc_html($above_36_text); ?></span>
             </label>
             <label>
                 <input type="radio" name="header_option" value="default_header">
-                <input type="hidden" name="homepage_id" value="16755">
+                <input type="hidden" name="homepage_id" value="16936">
 
                 <span class="radio-label"><?php echo esc_html($handicap_text); ?></span>
             </label>
+            
+            
         </div>
         <button type="submit">Doorgaan</button>
+        
+
     </form>
+    <hr style="    border: 3px solid black !important;
+    height: 5px !important;
+    width: 100% !important;
+    background-color: black !important;
+    margin-top: 14px !important;
+    margin-bottom: 0 !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;">
+
+
+
+     <a href="https://thegolflab.nl/zakelijke-optie/" ><button class="zakelijkebtn">Zakelijke Mogelijkheden</button></a>
 </div>
  <script>
         console.log('Popup HTML is rendered');
@@ -228,114 +263,236 @@ add_action('init', 'set_custom_header_and_homepage_based_on_condition');
 function enqueue_dynamic_header_selector_script() {
     ?>
 <script type="text/javascript">
-    jQuery(document).ready(function($) {
-        console.log("DOM fully loaded and parsed");
+//     jQuery(document).ready(function($) {
+//         console.log("DOM fully loaded and parsed");
 
-        // Function to get a cookie value
-        function getCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+//         // Function to get a cookie value
+//         function getCookie(name) {
+//             var nameEQ = name + "=";
+//             var ca = document.cookie.split(';');
+//             for (var i = 0; i < ca.length; i++) {
+//                 var c = ca[i].trim();
+//                 if (c.indexOf(nameEQ) == 0) {
+//                     console.log("Found cookie:", name, "=", c.substring(nameEQ.length, c.length));
+//                     return c.substring(nameEQ.length, c.length);
+//                 }
+//             }
+//             console.log("Cookie not found:", name);
+//             return null;
+//         }
+
+//         // Function to delete a cookie
+//         function deleteCookie(name) {
+//             document.cookie = name + '=; Max-Age=-99999999; path=/';
+//             console.log("Deleted cookie:", name);
+//         }
+
+//         // Check if the cookies are set
+//         var headerOptionCookie = getCookie("header_option");
+//         var homepageIdCookie = getCookie("homepage_id");
+
+//         // Get the form popup element
+//         var formPopup = $("#headerSelectionPopup");
+
+//         // If cookies are not set, show the popup
+//         if (!headerOptionCookie || !homepageIdCookie) {
+//             console.log("Cookies are not set, showing popup");
+//             $('#closePopupButton').hide();
+//             if (formPopup.length) {
+//                 formPopup.show();
+//             } else {
+//                 console.error("Form popup element not found");
+//             }
+//         }
+
+//         // Function to handle the form popup display
+//         var triggerElement = $("#trigger-header-form .elementor-button");
+//         if (triggerElement.length) {
+//             triggerElement.on("click touchend", handleFormPopup);
+//         }
+
+//         function handleFormPopup(event) {
+//             event.preventDefault();
+//             if (formPopup.length) {
+//                 formPopup.show();
+//             } else {
+//                 console.error("Form popup element not found");
+//             }
+//         }
+
+//         // Handle form submission
+//         var headerSelectionForm = $("#headerSelectionForm");
+//         if (headerSelectionForm.length) {
+//             headerSelectionForm.on("submit", function(event) {
+//                 event.preventDefault();
+//                 console.log("Form submitted");
+
+//                 var selectedOption = $('input[name="header_option"]:checked');
+//                 if (selectedOption.length) {
+//                     var selectedHomepageId = selectedOption.next().val();
+//                     console.log("Selected Option:", selectedOption.val());
+//                     console.log("Selected Homepage ID:", selectedHomepageId);
+
+//                     // Delete old cookies
+//                     deleteCookie("header_option");
+//                     deleteCookie("homepage_id");
+
+//                     // Get cookie duration from the backend
+//                     var cookieDuration = <?php echo json_encode(get_option('header_selection_options')['cookie_duration']); ?>;
+//                     console.log("Cookie Duration:", cookieDuration);
+
+//                     // Set new cookies with the selected option and homepage ID
+//                     setCookie("header_option", selectedOption.val(), cookieDuration);
+//                     setCookie("homepage_id", selectedHomepageId, cookieDuration);
+
+//                     console.log("New cookies set. Reloading page...");
+//                     location.reload();
+//                 } else {
+//                     console.error("No header option selected");
+//                 }
+//             });
+//         } else {
+//             console.error("Header selection form not found");
+//         }
+
+//         // Close the popup when the close button is clicked
+//         $("#closePopupButton").on("click", function() {
+//             $("#headerSelectionPopup").hide();
+//             console.log("Popup closed by user");
+//         });
+
+//         // Function to set a cookie
+//         function setCookie(name, value, seconds) {
+//             var expires = "";
+//             if (seconds) {
+//                 var date = new Date();
+//                 date.setTime(date.getTime() + (seconds * 1000));
+//                 expires = "; expires=" + date.toUTCString();
+//             }
+//             document.cookie = name + "=" + (value || "") + expires + "; path=/";
+//             console.log("Cookie set:", name, "=", value, "Expires in:", seconds, "seconds");
+//         }
+
+//          // Redirect to the homepage after header and homepage change
+//         headerSelectionForm.on("submit", function(event) {
+//             event.preventDefault();
+//              const currentTime = Date.now(); // Get current timestamp
+//             const newURL = "/?c=" + currentTime;
+//             window.location.href = newURL;
+//             console.log("Redirecting to homepage with current timestamp...");
+           
+
+//             // Once the homepage loads, reload it to ensure changes are applied
+//             setTimeout(function() {
+//                 if (window.location.pathname === "/") {
+//                     console.log("Forcing homepage reload to apply header changes...");
+//                     window.location.reload(true); // Force reload from the server
+//                 }
+//             }, 1000); // Adjust the timeout as necessary00); // Adjust the timeout as necessary
+//         });
+//     });
+  
+        jQuery(document).ready(function($) {
+            console.log("DOM fully loaded and parsed");
+
+            // Function to get a cookie value
+            function getCookie(name) {
+                var nameEQ = name + "=";
+                var ca = document.cookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i].trim();
+                    if (c.indexOf(nameEQ) == 0) {
+                        return c.substring(nameEQ.length, c.length);
+                    }
+                }
+                return null;
             }
-            return null;
-        }
 
-        // Check if the cookies are set
-        var headerOptionCookie = getCookie("header_option");
-        var homepageIdCookie = getCookie("homepage_id");
-
-        // Get the form popup element
-        var formPopup = $("#headerSelectionPopup");
-
-        // If cookies are not set, show the popup
-        if (!headerOptionCookie || !homepageIdCookie) {
-            if (formPopup.length) {
-                formPopup.show(); // Show the form popup
-            } else {
-                console.error("Form popup element not found");
+            // Function to delete a cookie
+            function deleteCookie(name) {
+                document.cookie = name + '=; Max-Age=-99999999; path=/';
             }
-        }
 
-
-
-
-        var triggerElement = $("#trigger-header-form .elementor-button");
-
-        // Add both click and touchend event listeners to handle desktop and mobile interactions
-        if (triggerElement.length) {
-            triggerElement.on("click touchend", handleFormPopup);
-        }
-
-        // Function to handle the form popup display
-        function handleFormPopup(event) {
-            event.preventDefault(); // Prevent default link behavior
+            // Check if the cookies are set
+            var headerOptionCookie = getCookie("header_option");
+            var homepageIdCookie = getCookie("homepage_id");
 
             // Get the form popup element
             var formPopup = $("#headerSelectionPopup");
 
-            // Check if the form popup element exists
-            if (formPopup.length) {
-                formPopup.show(); // Show the form
-            } else {
-                console.error("Form popup element not found");
-            }
-        }
-
-        // Handle form submission
-        var headerSelectionForm = $("#headerSelectionForm");
-        if (headerSelectionForm.length) {
-            headerSelectionForm.on("submit", function(event) {
-                event.preventDefault();
-                console.log("Form submitted");
-
-                var selectedOption = $('input[name="header_option"]:checked');
-                if (selectedOption.length) {
-                    var selectedHomepageId = selectedOption.next().val();
-                    console.log("Selected Option: " + selectedOption.val());
-                    console.log("Selected Homepage ID: " + selectedHomepageId);
-
-                    // Get cookie duration from the backend
-                    var cookieDuration = <?php echo json_encode(get_option('header_selection_options')['cookie_duration']); ?>;
-                    console.log("Cookie Duration: " + cookieDuration);
-
-                    // Set the cookies with the selected option and homepage ID
-                    setCookie("header_option", selectedOption.val(), cookieDuration);
-                    setCookie("homepage_id", selectedHomepageId, cookieDuration);
-
-                    // Reload the page to apply the header and homepage change after setting the cookies
-                    location.reload();
-                } else {
-                    console.error("No header option selected");
+            // Show the popup if cookies are not set
+            if (!headerOptionCookie || !homepageIdCookie) {
+                $('#closePopupButton').hide();
+                if (formPopup.length) {
+                    formPopup.show();
                 }
-            });
-        } else {
-            console.error("Header selection form not found");
-        }
-
-        // Function to set a cookie
-        function setCookie(name, value, seconds) {
-            var expires = "";
-            if (seconds) {
-                var date = new Date();
-                date.setTime(date.getTime() + (seconds * 1000));
-                expires = "; expires=" + date.toUTCString();
             }
-            document.cookie = name + "=" + (value || "") + expires + "; path=/";
-            console.log("Cookie set: " + name + "=" + value);
-        }
 
+            // Add click event listener to the trigger element
+            var triggerElement = $("#trigger-header-form .elementor-button");
+            if (triggerElement.length) {
+                triggerElement.on("click touchend", function(event) {
+                    event.preventDefault(); // Prevent default behavior (e.g., following a link)
+                    if (formPopup.length) {
+                        formPopup.show(); // Show the popup form
+                        console.log("Form popup triggered");
+                    } else {
+                        console.error("Form popup element not found");
+                    }
+                });
+            }
 
-        // Redirect to the homepage after header and homepage change
-        headerSelectionForm.on("submit", function() {
-            window.location.href = "/";
+            // Handle form submission
+            var headerSelectionForm = $("#headerSelectionForm");
+            if (headerSelectionForm.length) {
+                headerSelectionForm.on("submit", function(event) {
+                    event.preventDefault();
+                    console.log("Form submitted");
+
+                    var selectedOption = $('input[name="header_option"]:checked');
+                    if (selectedOption.length) {
+                        var selectedHomepageId = selectedOption.next().val();
+
+                        // Delete old cookies
+                        deleteCookie("header_option");
+                        deleteCookie("homepage_id");
+
+                        // Get cookie duration from backend (placeholder value for this example)
+                        var cookieDuration = 86400; // 1 Day duration in seconds
+
+                        // Set new cookies
+                        setCookie("header_option", selectedOption.val(), cookieDuration);
+                        setCookie("homepage_id", selectedHomepageId, cookieDuration);
+
+                        // Redirect to homepage with timestamp
+                        const currentTime = new Date().getTime(); // Current timestamp
+                        const newURL = "/?c=" + currentTime;
+                        window.location.href = newURL;
+                        console.log("Redirecting to homepage with current timestamp...");
+                    } else {
+                        console.error("No header option selected");
+                    }
+                });
+            }
+
+            // Function to set a cookie
+            function setCookie(name, value, seconds) {
+                var expires = "";
+                if (seconds) {
+                    var date = new Date();
+                    date.setTime(date.getTime() + (seconds * 1000));
+                    expires = "; expires=" + date.toUTCString();
+                }
+                document.cookie = name + "=" + (value || "") + expires + "; path=/";
+                console.log("Cookie set:", name, "=", value, "Expires in:", seconds, "seconds");
+            }
+
+            // Close the popup when the close button is clicked
+            $("#closePopupButton").on("click", function() {
+                formPopup.hide();
+                console.log("Popup closed by user");
+            });
         });
-
-
-
-    });
 </script>
 
 
@@ -343,4 +500,21 @@ function enqueue_dynamic_header_selector_script() {
 }
 add_action('wp_footer', 'hamza_javed_add_popup_html', 10); // Priority 10
 add_action('wp_footer', 'enqueue_dynamic_header_selector_script', 20); // Priority 20
+
+// Add form handling logic
+function handle_form_submission() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['header_option'])) {
+        // Check if form is submitted and header option is selected
+        $selected_option = sanitize_text_field($_POST['header_option']); // Sanitize input
+        $homepage_id = isset($_POST['homepage_id']) ? intval($_POST['homepage_id']) : null;
+
+        // Get the current timestamp
+        $currentTime = time();
+
+        // Redirect to the homepage or any other page with the timestamp
+        wp_redirect(home_url('/?c=' . $currentTime));
+        exit; // Ensure no further processing
+    }
+}
+add_action('template_redirect', 'handle_form_submission');
 
