@@ -145,49 +145,6 @@ function hamza_javed_plugin_settings_link($links) {
 
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'hamza_javed_plugin_settings_link');
 
-// add_action( 'after_setup_theme', 'custom_check_woodmart_headers' );
-
-// function custom_check_woodmart_headers() {
-//     if ( function_exists( 'woodmart_get_whb_headers_array' ) ) {
-//         $headers = woodmart_get_whb_headers_array();
-//         // $current_headers_instance = whb_get_header();
-//         // $whb_get_settings = whb_get_settings();
-//         // $woodmart_get_header_classes = woodmart_get_header_classes();
-//         echo '<pre>';
-//         // print_r($headers);
-//         print_r($headers);
-//         echo '</pre>';
-//     } else {
-//         echo 'The function woodmart_get_whb_headers_array() is not available.';
-//     }
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 use XTS\Modules\Header_Builder\Frontend;
 // Add the popup HTML to the footer
 function hamza_javed_add_popup_html() {
