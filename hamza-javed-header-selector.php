@@ -148,14 +148,14 @@ add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'hamza_javed_plug
 use XTS\Modules\Header_Builder\Frontend;
 // Add the popup HTML to the footer
 function hamza_javed_add_popup_html() {
-  
-$options = get_option('header_selection_options');
 
-$above_36_text = isset($options['header_above_36']) ? $options['header_above_36'] : 'Above 36';
-$below_36_text = isset($options['header_below_36']) ? $options['header_below_36'] : 'Below 36';
-$handicap_text = isset($options['header_handicap']) ? $options['header_handicap'] : 'What is Handicap';
 
-?>
+   // Get the current URL
+    $current_url = home_url(add_query_arg(null, null));
+    $options = get_option('header_selection_options');
+    $above_36_text = isset($options['header_above_36']) ? $options['header_above_36'] : 'Above 36';
+    $below_36_text = isset($options['header_below_36']) ? $options['header_below_36'] : 'Below 36';
+    $handicap_text = isset($options['header_handicap']) ? $options['header_handicap'] : 'What is Handicap';  ?>
 <div id="headerSelectionPopup">
     <button type="button" id="closePopupButton" style="position: absolute;top: 10px;right: 10px;border: none;font-size: 20px;cursor: pointer;background: black;">&times;</button>
 
@@ -275,15 +275,21 @@ function enqueue_dynamic_header_selector_script() {
 
             // Get the form popup element
             var formPopup = $("#headerSelectionPopup");
+            // Get current page URL
+            var currentUrl = window.location.href;
 
-            // Show the popup if cookies are not set
-            if (!headerOptionCookie || !homepageIdCookie) {
-                $('#closePopupButton').hide();
-                if (formPopup.length) {
-                    formPopup.show();
+           // Check if the current URL is the specific page to hide the popup on
+            if (currentUrl.indexOf('zakelijke-optie') === -1) {
+                // If NOT on 'zakelijke-optie' page, use existing logic (show popup if no cookies are set)
+                if (!getCookie("header_option") || !getCookie("homepage_id")) {
+                    formPopup.show(); // Show the popup if cookies are not set
+                    closePopupButton.show(); // Ensure the close button is visible
                 }
+            } else {
+                // Hide the popup and close button initially on 'zakelijke-optie' page
+                formPopup.hide();
+                // closePopupButton.hide();
             }
-
             // Add click event listener to the trigger element
             var triggerElement = $("#trigger-header-form .elementor-button");
             if (triggerElement.length) {
