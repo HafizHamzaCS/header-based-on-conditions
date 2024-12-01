@@ -12,17 +12,20 @@ License: GPL2
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
-
-// Enqueue scripts and styles
+/**
+ * Enqueue plugin styles.
+ * This function loads the CSS file for the Hamza Javed Header Selector plugin.
+ */
 function hamza_javed_enqueue_scripts() {
 
         wp_enqueue_style( 'hamza-javed-header-selector', plugin_dir_url( __FILE__ ) . 'css/hamza-javed-header-selector.css' );
     }
 
 add_action( 'wp_enqueue_scripts', 'hamza_javed_enqueue_scripts' );
-
-
-// Add settings page to the admin menu
+/**
+ * Add settings page to the WordPress admin menu.
+ * This function adds the "Header Selection" settings page under the "Settings" menu in the admin panel.
+ */
 function custom_header_selection_menu() {
     add_options_page(
         'Header Selection Settings',  // Page title
@@ -33,8 +36,10 @@ function custom_header_selection_menu() {
     );
 }
 add_action('admin_menu', 'custom_header_selection_menu');
-
-// Display the settings page content
+/**
+ * Display the header selection settings page.
+ * This function outputs the HTML for the settings page where users can configure header options.
+ */
 function custom_header_selection_page() {
     ?>
     <div class="wrap">
@@ -49,7 +54,10 @@ function custom_header_selection_page() {
     </div>
     <?php
 }
-// Register settings and add sections/fields
+/**
+ * Register settings and add settings fields to the admin page.
+ * This function registers the settings and adds fields for header options and cookie duration in the admin panel.
+ */
 function custom_header_selection_settings_init() {
     register_setting(
         'header_selection_settings_group', // Option group
@@ -112,8 +120,10 @@ function custom_header_selection_settings_init() {
     );
 }
 add_action('admin_init', 'custom_header_selection_settings_init');
-
-// Callback function to render the text fields
+/**
+ * Callback function to render text input fields.
+ * This function renders text input fields for each header option (e.g., Above 36, Below 36).
+ */
 function custom_header_selection_text_field_callback($args) {
     $options = get_option('header_selection_options');
     $value = isset($options[$args['label_for']]) ? $options[$args['label_for']] : '';
@@ -121,7 +131,10 @@ function custom_header_selection_text_field_callback($args) {
     <input type="text" id="<?php echo esc_attr($args['label_for']); ?>" name="<?php echo esc_attr($args['name']); ?>" value="<?php echo esc_attr($value); ?>" class="regular-text">
     <?php
 }
-// Callback function to render the cookie duration dropdown
+/**
+ * Callback function to render the cookie duration dropdown.
+ * This function renders a dropdown list to set the cookie expiration duration (1 hour, 1 day, 1 week, etc.).
+ */
 function custom_header_selection_cookie_duration_callback($args) {
     $options = get_option('header_selection_options');
     $value = isset($options[$args['label_for']]) ? $options[$args['label_for']] : '86400'; // Default to 1 day (86400 seconds)
@@ -136,7 +149,10 @@ function custom_header_selection_cookie_duration_callback($args) {
     </select>
     <?php
 }
-// Add a settings link to the plugin actions
+/**
+ * Add a settings link to the plugin actions.
+ * This function adds a settings link to the plugin actions menu for easy access to the settings page.
+ */
 function hamza_javed_plugin_settings_link($links) {
     $settings_link = '<a href="options-general.php?page=header-selection-settings">Settings</a>';
     array_unshift($links, $settings_link);
@@ -146,7 +162,10 @@ function hamza_javed_plugin_settings_link($links) {
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'hamza_javed_plugin_settings_link');
 
 use XTS\Modules\Header_Builder\Frontend;
-// Add the popup HTML to the footer
+/**
+ * Add the popup HTML to the footer.
+ * This function displays a popup form to allow users to select their preferred header option.
+ */
 function hamza_javed_add_popup_html() {
 
 
@@ -206,7 +225,10 @@ function hamza_javed_add_popup_html() {
 <?php
     }
 add_shortcode('header_selection_form', 'hamza_javed_add_popup_html');
-// add_action('wp', 'set_custom_header_based_on_condition', 10);
+/**
+ * Set the custom header and homepage based on the selected option.
+ * This function updates the selected header and homepage based on cookie values.
+ */
 
 function set_custom_header_and_homepage_based_on_condition() {
     if (isset($_COOKIE['header_option']) && isset($_COOKIE['homepage_id'])) {
@@ -242,15 +264,17 @@ function set_custom_header_and_homepage_based_on_condition() {
 }
 add_action('init', 'set_custom_header_and_homepage_based_on_condition');
 
+/**
+ * JS Code Load by footer script
 
+ */
 
 function enqueue_dynamic_header_selector_script() {
     ?>
 <script type="text/javascript">
 
         jQuery(document).ready(function($) {
-            console.log("DOM fully loaded and parsed");
-
+         
             // Function to get a cookie value
             function getCookie(name) {
                 var nameEQ = name + "=";
@@ -362,8 +386,9 @@ function enqueue_dynamic_header_selector_script() {
 }
 add_action('wp_footer', 'hamza_javed_add_popup_html', 10); // Priority 10
 add_action('wp_footer', 'enqueue_dynamic_header_selector_script', 20); // Priority 20
-
-// Add form handling logic
+/**
+ * Add form handling logic
+ */
 function handle_form_submission() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['header_option'])) {
         // Check if form is submitted and header option is selected
