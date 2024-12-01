@@ -1,6 +1,5 @@
 === Hamza Javed Header Selector ===
 Contributors: hamzajaved
-Donate link: https://yourwebsite.com/donate
 Tags: header, customization, user selection, WordPress, WoodMart
 Requires at least: 5.0
 Tested up to: 6.0
